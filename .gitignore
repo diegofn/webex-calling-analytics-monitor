@@ -143,3 +143,8 @@ app/data/*
 *tests/
 webex_call_block.db
 app/webex_call_block.db
+bin/*
+bin
+lib64
+include/*
+pyvenv.cfg

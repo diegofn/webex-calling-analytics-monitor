@@ -17,7 +17,7 @@ AUTHORIZATION_BASE_URL = 'https://api.ciscospark.com/v1/authorize'
 TOKEN_URL = 'https://api.ciscospark.com/v1/access_token'
 WEBEX_BASE_URL = 'https://webexapis.com/v1/'
 SCOPE: List[str] = ['spark:all', 'spark-admin:xsi', 'spark:xsi', 'spark-admin:locations_read', 'spark-admin:people_read', 'spark-admin:licenses_read']
-PUBLIC_URL: str = 'https://puma-major-fawn.ngrok-free.app'
+PUBLIC_URL: str = 'https://public.domain.com'
 
 # Geolocation bounding boxes &
 LAT_MIN: float = 3.166766
