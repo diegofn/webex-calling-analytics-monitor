@@ -79,7 +79,7 @@ class CallMonitor:
         self.access_token = access_token
         self.webex = wxcadm.Webex(access_token)  # Initialize XSI API
         self.webex.org.get_xsi_endpoints()  # Fetch the XSI endpoints for the organization
-        self.all_people = self.webex.org.wxc_people  # Fetch all people in the organization
+        self.all_people = self.webex.org.people.webex_calling()  # Fetch all people in the organization
         self.xsi_user_map = {}  # Mapping of person ID to their display name and ID
         self.call_to_user_map = {}  # Track / map call to user
 
@@ -246,7 +246,7 @@ class CallMonitor:
         """
         Handle an event.
         """
-        # lm.lnp(f"Event Received: \n: {event}")  # Print the event data
+        #lm.lnp(f"Event Received: \n: {event}")  # Print the event data
         event_details = self.extract_event_details(event)  # Extract the event details
         event_type = event_details.get('event_type')  # Fetch the event type
 
@@ -280,7 +280,7 @@ class CallMonitor:
         Args:
             events_queue (queue.Queue): The queue storing the events.
         """
-        # lm.lnp('monitor_calls called')
+        lm.lnp('monitor_calls called')
 
         while True:  # Start an infinite loop to get the messages as they are placed in Queue
             try:
@@ -300,7 +300,7 @@ class CallMonitor:
             events = wxcadm.XSIEvents(self.webex.org)
             events_queue = queue.Queue()
             channel = events.open_channel(events_queue)
-            subscription_response = channel.subscribe("Advanced Call")  # Subscribe to the Advanced Call event package
+            subscription_response = channel.subscribe("Call Center Agent")  # Subscribe to the Advanced Call event package
 
             if subscription_response:
                 lm.lnp(f"Subscribed to 'Advanced Call' event package {subscription_response}", level="info")
