@@ -127,14 +127,20 @@ $ uvicorn main:app --log-level warning
 ```
 
 ## Screenshots/GIFs
-### Environment Variables & Settings Setup: <br>
-![/IMAGES/setup.gif](/IMAGES/setup.gif)<br>
+### Environment Setup: <br>
+![/images/setup.gif](/images/setup.gif)<br>
 
-### PostgreSQL Setup:
-![/IMAGES/psql_setup.gif](/IMAGES/psql_setup.gif)<br>
+### Database Setup: <br>
+![/images/database_setup.gif](/images/database_setup.gif)<br>
 
-### Webex Calling Event Monitoring Setup:
-![/IMAGES/call_monitor.gif](/IMAGES/call_monitor.gif)<br>
+### Analyzer and monitoring setup <br>
+![/images/app_setup.gif](/images/app_setup.gif)<br>
+
+### Starting Call Monitoring <br>
+![/images/call_monitor.gif](/images/call_monitor.gif)<br>
+
+## Webex Calling XSI Documentation
+https://developer.cisco.com/docs/webex-calling/developer-docs/
 
 ## Based on: gve_devnet_webex_xsi_call_block 
 https://github.com/gve-sw/gve_devnet_webex_xsi_call_block

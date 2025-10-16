@@ -300,7 +300,7 @@ class CallMonitor:
             events = wxcadm.XSIEvents(self.webex.org)
             events_queue = queue.Queue()
             channel = events.open_channel(events_queue)
-            subscription_response = channel.subscribe("Call Center Agent")  # Subscribe to the Advanced Call event package
+            subscription_response = channel.subscribe("Advanced Call")  # Subscribe to the Advanced Call event package
 
             if subscription_response:
                 lm.lnp(f"Subscribed to 'Advanced Call' event package {subscription_response}", level="info")
