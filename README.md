@@ -46,14 +46,14 @@ First version for daemon that register the XSI Interface for the organization an
 
 4. Install python requerimients
 ```Shell
-python -m venv .
-source bin/activate
-pip install -r requirements.txt
+   python -m venv .
+   source bin/activate
+   pip install -r requirements.txt
 ```
 
 5. Install uvicorn process
 ```Shell
-python setup.py run
+   python setup.py run
 ```
 
 ## Manually create and update the `.env` and update settings.py file:
