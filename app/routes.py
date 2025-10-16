@@ -214,7 +214,7 @@ async def admin_success(request: Request):
         return JSONResponse(content={"message": "Unauthorized access. Admin login required."}, status_code=403)
     session_token = request.cookies.get("session_token")
     lm.lnp(f"Admin successfully authenticated. Session token: {session_token}. Client: {request.client.host}")
-    return templates.TemplateResponse(name='admin_success.html', context={'request': request, 'session_token': session_token})
+    return templates.TemplateResponse(name='admin_success.html', context={'request': request, 'session_token': session_token, "public_url": PUBLIC_URL})
 
 
 @webex_router.get("/admin/refresh_token")
