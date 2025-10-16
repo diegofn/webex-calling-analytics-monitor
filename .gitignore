@@ -136,6 +136,7 @@ dependencies*
 
 # MISC
 app_dc/*
+test/*
 
 logs/app.log
 app/config/.env
