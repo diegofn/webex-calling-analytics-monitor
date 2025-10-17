@@ -29,6 +29,7 @@ from databases import Database
 from sqlalchemy import create_engine
 from app.database.models import Base
 from app.call_monitor import start_call_monitoring
+from app.agent_monitor import start_agent_monitoring
 
 
 def create_app() -> FastAPI:
@@ -60,6 +61,14 @@ def create_app() -> FastAPI:
             await start_call_monitoring()
         except Exception as e:
             lm.error(f"Error starting call monitoring: {e}")
+
+
+        # Start agent monitoring
+        try:
+            await start_agent_monitoring()
+        except Exception as e:
+            lm.error(f"Error starting agent monitoring: {e}")
+
         fastapi_app.mount("/static", StaticFiles(directory="app/static"), name="static")  # Serve static files
 
     @fastapi_app.on_event("shutdown")
