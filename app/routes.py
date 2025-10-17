@@ -16,6 +16,7 @@ __author__ = "Mark Orszycki <morszyck@cisco.com>"
 __copyright__ = "Copyright (c) 2024 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
+import json
 from fastapi import Request, APIRouter, HTTPException, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.responses import JSONResponse
@@ -214,7 +215,7 @@ async def admin_success(request: Request):
         return JSONResponse(content={"message": "Unauthorized access. Admin login required."}, status_code=403)
     session_token = request.cookies.get("session_token")
     lm.lnp(f"Admin successfully authenticated. Session token: {session_token}. Client: {request.client.host}")
-    return templates.TemplateResponse(name='admin_success.html', context={'request': request, 'session_token': session_token, "public_url": PUBLIC_URL})
+    return templates.TemplateResponse(name='admin_success.html', context={'request': request, 'session_token': session_token})
 
 
 @webex_router.get("/admin/refresh_token")
@@ -332,3 +333,55 @@ async def update_time_location_db(data: TimeLocationData, db: Session = Depends(
 @webex_router.get("/error")
 async def get_error(request: Request):
     return templates.TemplateResponse("error.html", {"request": request})
+
+
+@webex_router.get("/api/xsi-users", response_class=HTMLResponse)
+async def show_xsi_users(request: Request, db: Session = Depends(dependency_db)):
+    """
+        Displays the XSI users page.
+    """
+    lm.lnp_wbx_oauth("Attempting to get all XSI Users")
+    is_admin_authenticated = request.cookies.get("is_admin_authenticated") == "true"
+    if not is_admin_authenticated:
+        lm.lnp("Unauthorized access. Admin login required.", level="error")
+        return JSONResponse(content={"message": "Unauthorized access. Admin login required."}, status_code=403)
+
+    # Get admin access token from DB
+    crud = CRUDOperations(db)   
+    admin_access_token = crud.get_admin_access_token()
+
+    if not admin_access_token:
+        lm.lnp("Admin token retrieval failed", level="error")
+        return JSONResponse(status_code=500, content={"message": "Admin token retrieval failed"})
+    
+    # Return users as JSON
+    try:
+        call_monitor = CallMonitor(admin_access_token)
+                
+        # Build a JSON-serializable copy of the xsi_user_map without the 'xsi_instance' column
+        raw_map = call_monitor.xsi_user_map or {}
+        sanitized_map = {}
+        for xsi_id, info in raw_map.items():
+            if not isinstance(info, dict):
+                # keep as-is (or coerce to string) if unexpected type
+                sanitized_map[xsi_id] = info
+                continue
+
+            # copy all keys except 'xsi_instance'
+            entry = {k: v for k, v in info.items() if k != "xsi_instance"}
+
+            # ensure values are JSON-serializable; fallback to str() when necessary
+            for k, v in list(entry.items()):
+                try:
+                    json.dumps(v)
+                except (TypeError, ValueError):
+                    entry[k] = str(v)
+
+                sanitized_map[xsi_id] = entry
+
+        lm.lnp("XSI Users returned", level="success")
+        return JSONResponse(content=sanitized_map, status_code=200)
+        
+    except Exception as e:
+        lm.lnp(f"Failed to get XSI Users: {e}", level="error")
+        return JSONResponse(status_code=500, content={"message": f"Failed to get XSI Users: {str(e)}"})

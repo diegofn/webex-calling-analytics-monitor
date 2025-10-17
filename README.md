@@ -119,11 +119,10 @@ GEOLOCATION_TIMEOUT: int = 20
 
 ## Usage
 ### Start the Application
-To initiate the prototype, start the FastAPI application:
+To initiate the App, start the FastAPI application:
 ```
-$ cd app
-$ uvicorn main:app
-$ uvicorn main:app --log-level warning
+   uvicorn main:app
+   uvicorn main:app --log-level warning
 ```
 
 ## Screenshots/GIFs
